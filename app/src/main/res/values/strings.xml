@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CleanArchitecture</string>
+    <string name="save_data">save data</string>
+    <string name="get_data">get data</string>
+</resources>
