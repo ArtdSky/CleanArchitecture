@@ -13,9 +13,9 @@ private const val DEFAULT_LAST_NAME = "Default last name"
 private const val DEFAULT_FIRST_NAME = "Default first name"
 
 
-class SharedPrefUserStorage(context : Context) : UserStorage {
+class SharedPrefUserStorage(context: Context) : UserStorage {
 
-    val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME,Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
 
 
     override fun save(user: User): Boolean {
@@ -25,8 +25,10 @@ class SharedPrefUserStorage(context : Context) : UserStorage {
     }
 
     override fun get(): User {
-        val firstName = sharedPreferences.getString(KEY_FIRST_NAME, DEFAULT_FIRST_NAME) ?: DEFAULT_FIRST_NAME
-        val lastName = sharedPreferences.getString(KEY_LAST_NAME, DEFAULT_LAST_NAME) ?: DEFAULT_LAST_NAME
+        val firstName =
+            sharedPreferences.getString(KEY_FIRST_NAME, DEFAULT_FIRST_NAME) ?: DEFAULT_FIRST_NAME
+        val lastName =
+            sharedPreferences.getString(KEY_LAST_NAME, DEFAULT_LAST_NAME) ?: DEFAULT_LAST_NAME
         return User(firstName = firstName, lastName = lastName)
 
     }
