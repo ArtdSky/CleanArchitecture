@@ -5,7 +5,7 @@ import com.example.cleanarchitecture.domain.models.UserName
 
 interface UserRepository {
 
-    fun saveName(saveparam : SaveUserNameParam) :Boolean
+    fun saveName(saveParam : SaveUserNameParam) :Boolean
 
     fun getName() : UserName
 }

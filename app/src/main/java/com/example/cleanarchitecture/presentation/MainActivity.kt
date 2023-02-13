@@ -7,37 +7,44 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.cleanarchitecture.R
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.example.cleanarchitecture.app.App
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-
-    private val vm by viewModel<MainViewModel>()
+    @Inject
+    lateinit var vmFactory: MainViewModelFactory
+    private lateinit var vm: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        (applicationContext as App).appComponent.inject(this)
+
         Log.e("AAA", "Activity Created")
 
+        vm = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
 
-        val tv_data = findViewById<TextView>(R.id.tv_data)
-        val button_receive = findViewById<Button>(R.id.button_receive)
-        val text_edit = findViewById<EditText>(R.id.text_edit)
-        val button_send = findViewById<Button>(R.id.button_send)
+
+        val dataTextView = findViewById<TextView>(R.id.tv_data)
+        val dataEditView = findViewById<EditText>(R.id.text_edit)
+        val sendButton = findViewById<Button>(R.id.button_send)
+        val receiveButton = findViewById<Button>(R.id.button_receive)
+
 
         vm.resultLive.observe(this, Observer {
-            tv_data.text = it
+            dataTextView.text = it
         })
 
-        button_send.setOnClickListener {
-            val text = tv_data.text.toString()
-            vm.save(text)
+        sendButton.setOnClickListener {
+            val text = dataEditView.text.toString()
+            vm.save(text = text)
 
         }
-
-        button_receive.setOnClickListener {
+        receiveButton.setOnClickListener {
             vm.load()
         }
     }

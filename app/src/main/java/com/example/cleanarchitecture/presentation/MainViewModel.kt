@@ -21,8 +21,6 @@ class MainViewModel(
 
 
 
-
-
     override fun onCleared() {
         Log.e("AAA", "VM Cleared")
         super.onCleared()
