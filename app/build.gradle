@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.cleanarchitecture"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    def koin_version= "3.2.0"
+    def koin_version= "3.3.2"
     // Koin for Android
     implementation "io.insert-koin:koin-android:$koin_version"
     // Koin Core features
