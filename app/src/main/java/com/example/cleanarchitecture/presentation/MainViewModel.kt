@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.cleanarchitecture.data.repository.UserRepositoryImpl
-import com.example.cleanarchitecture.data.storage.sharedrefs.SharedPrefUserStorage
 import com.example.cleanarchitecture.domain.models.SaveUserNameParam
 import com.example.cleanarchitecture.domain.models.UserName
 import com.example.cleanarchitecture.domain.usecase.GetUserNameUseCase
@@ -15,29 +13,54 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getUserNameUseCase : GetUserNameUseCase,
+    private val getUserNameUseCase: GetUserNameUseCase,
     private val saveUserNameUseCase: SaveUserNameUseCase
 ) : ViewModel() {
 
-    private var resultLiveMutable = MutableLiveData<String>()
-    val resultLive : LiveData<String> = resultLiveMutable
-
-
+    private var stateLiveMutable = MutableLiveData<MainState>()
+    val stateLive: LiveData<MainState> = stateLiveMutable
+    
+    init {
+        Log.e("AAA", "VM Cleared")
+        stateLiveMutable.value = MainState(
+            saveResult = false,
+            firstName = "",
+            lastName = ""
+        )
+    }
 
     override fun onCleared() {
-        Log.e("AAA", "VM Cleared")
         super.onCleared()
     }
 
-    fun save(text : String){
-        val params = SaveUserNameParam(name = text)
-        val result : Boolean = saveUserNameUseCase.execute(param = params)
-        resultLiveMutable.value =  "save result = $result"
+    fun send(event: MainEvent) {
+        when (event) {
+            is SaveEvent -> {
+                save(text = event.text)
+            }
+            is LoadEvent -> {
+                load()
+            }
+        }
     }
 
-    fun load(){
-        val userName : UserName = getUserNameUseCase.execute()
-        resultLiveMutable.value = "${userName.firstName} ${userName.lastName}"
+    private fun save(text: String) {
+        val params = SaveUserNameParam(name = text)
+        val result: Boolean = saveUserNameUseCase.execute(param = params)
+        stateLiveMutable.value = MainState(
+            saveResult = result,
+            firstName = stateLiveMutable.value!!.firstName,
+            lastName = stateLiveMutable.value!!.lastName
+        )
+    }
+
+    private fun load() {
+        val userName: UserName = getUserNameUseCase.execute()
+        stateLiveMutable.value = MainState(
+            saveResult = stateLiveMutable.value!!.saveResult,
+            firstName = userName.firstName,
+            lastName = userName.lastName
+        )
     }
 
 }
