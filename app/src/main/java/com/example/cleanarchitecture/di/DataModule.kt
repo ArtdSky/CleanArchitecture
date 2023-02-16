@@ -7,16 +7,24 @@ import com.example.cleanarchitecture.data.storage.sharedrefs.SharedPrefUserStora
 import com.example.cleanarchitecture.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 
 @Module
+@InstallIn(SingletonComponent::class)
 class DataModule {
+
     @Provides
-    fun provideUserStorage(context: Context): UserStorage {
+    @Singleton
+    fun provideUserStorage(@ApplicationContext context: Context): UserStorage {
         return SharedPrefUserStorage(context = context)
     }
 
     @Provides
+    @Singleton
     fun provideUserRepository(userStorage: UserStorage): UserRepository {
         return UserRepositoryImpl(userStorage = userStorage)
     }
